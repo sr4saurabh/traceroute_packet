@@ -2,30 +2,39 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+var path = require('path');
+var bodyParser = require('body-parser')
+
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 
-app.get('/', (req, res) => {
- var command = "ls";
+app.get('/',(req,res) => {
+  res.sendFile(
+		path.join(__dirname+"/start.html"));
+})
+
+app.post('/findway', (req, res) => {
+ var command = "tracert ";
+ var locator = String(req.body.urlname)
+ command = command + locator;
+ console.log(req.body.urlname)
  var outputpipe;
  var exec = require('child_process').exec;
   var child;
   child = exec(command,
     function (error, stdout, stderr) {
-       //console.log('stdout: ' + stdout);
-       //console.log('stderr: ' + stderr);
+       
        outputpipe = String(stdout);
-       if (error !== null) {
+       if (error !== null) 
            console.log('exec error: ' + error);
-       }
        else
-       {
-          
           res.render("output.ejs",{outputpipe:outputpipe});
-       }
-      // res.render("output.ejs");
+       
+     
     });
     
-    //res.send("bhai ye to ho rha h")
+    
 })
 
 app.listen(port, () => {
