@@ -15,7 +15,7 @@ app.get('/',(req,res) => {
 })
 
 app.post('/findway', (req, res) => {
- var command = "tracert ";
+ var command = "tracert -d ";
  var locator = String(req.body.urlname)
  command = command + locator;
  console.log(req.body.urlname)
