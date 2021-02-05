@@ -38,11 +38,13 @@ function giveip(st)
     }
 
   }
-      for(var i = 0; i < outarr.length; i++){
+
+  return outarr;
+      /**for(var i = 0; i < outarr.length; i++){
       querystring = querystring + outarr[i] + ',';
       }
       querystring = querystring.slice(0,-1);
-      return querystring;
+      return querystring; **/
 }
 
 function givelatlong(F)
@@ -82,21 +84,41 @@ app.post('/findway', (req, res) => {
        outputpipe = String(stdout);
        if (error !== null){ 
            console.log('exec error: ' + error);
-           res.render("output.ejs",{outputpipe:"cant reach to the server you asked"});
+           res.render("output.ejs",{outputpipe:"cant reach to the server you asked."});
        }
        else
        {
         var st = outputpipe.split(/\r?\n/);
         console.log(st);
         var iparr = giveip(st);
-        
-       
+
+                var geopoints = [];
+                for(var i = 1; i < 4 ; i++){
+                      var mainurl = 'http://api.ipstack.com/';
+                      var middleurl = iparr[i];
+                      //middleurl has to made of ips seperated by commas
+                      var apikey = '?access_key=fce13c65c996f0aa4a5c3193f0a5150b&fields=latitude,longitude';
+                      var requrl = mainurl + middleurl + apikey;
+      
+                      request(requrl, { json: true }, (err, res, body) => {
+                      if (err)
+                          console.log(err);
+                      else
+                      {
+                        console.log(body);
+                      }
+                         
+                      
+                      });
+                }
+                
+
         res.render("output.ejs",{outputpipe:iparr});
        }
          
        
      
-    });    
+    });   
 })
 
 app.post('/geo' , (req,res) => {
