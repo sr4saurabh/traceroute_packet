@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+const request = require('request');
 var path = require('path');
 var bodyParser = require('body-parser')
 
@@ -32,9 +33,23 @@ app.post('/findway', (req, res) => {
           res.render("output.ejs",{outputpipe:outputpipe});
        
      
-    });
-    
-    
+    });    
+})
+
+app.post('/geo' , (req,res) => {
+  var ip = req.body.ip;
+  var mainurl = 'http://api.ipstack.com/'
+  var middleurl = ''
+  //middleurl has to made of ips seperated by commas
+  var apikey = '?access_key=fce13c65c996f0aa4a5c3193f0a5150b'
+  var requrl = mainurl + middleurl + apikey
+  request('http://api.ipstack.com/106.51.8.242?access_key=fce13c65c996f0aa4a5c3193f0a5150b', { json: true }, (err, res, body) => {
+  if (err) { return console.log(err); }
+  console.log(body.url);
+  console.log(body.explanation);
+  console.log(body);
+});
+
 })
 
 app.listen(port, () => {
