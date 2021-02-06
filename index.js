@@ -120,7 +120,10 @@ app.post('/findway', (req, res) => {
      
     });   
 })
-
+app.get('/pip',(req,res) => {
+    
+    res.render('copy.ejs',{pipe:[[81.595354,25.578121],[-77.032, 38.913],[-36.954105,-5.402580]]});
+})
 app.post('/geo' , (req,res) => {
  
   var ip = req.body.ip;

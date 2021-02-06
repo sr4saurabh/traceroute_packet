@@ -41,7 +41,7 @@
 <div class="overlay">
     <button id="replay">Replay</button>
 </div>
-
+<% var pip  = pipe; %>
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoibmV2ZXJnaXZldXA3Y3AiLCJhIjoiY2trdTM0b3QwMTM4ZzJ1cnRuNWlhejViciJ9.qvus7_uwp7BvKDQ8sjeBhQ';
     var map = new mapboxgl.Map({
@@ -58,6 +58,7 @@
     var destination = [-77.032, 38.913];
     var india = [81.595354,25.578121];
     // A simple line from origin to destination.
+    var piper = '<%- JSON.stringify(pipe) %>';
     var route = {
         'type': 'FeatureCollection',
         'features': [
@@ -65,7 +66,7 @@
                 'type': 'Feature',
                 'geometry': {
                     'type': 'LineString',
-                    'coordinates': pipe
+                  'coordinates': JSON.parse(piper)
                 }
             }
         ]
