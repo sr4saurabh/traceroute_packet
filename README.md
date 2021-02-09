@@ -7,7 +7,7 @@
 <ul>
 <li>It is based on sending the icmp packet to a server and finding the route it goes through using the tracroute command.</li>
 <br>
-<li>Traceroute combines the power of asynchronous JavaScript and Child Processes combining it with ICMP to give the path.</li>
+<li>This Project combines the power of asynchronous JavaScript(Async:Await :) and Child Processes combining it with ICMP to give the path.</li>
 <br>
 <li> APIs used  -> IpStack.</li>
 <ul>
