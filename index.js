@@ -48,7 +48,7 @@ function giveipwindows(st)
 
 function giveiplinux(st)
 {
-    //console.log(st.length);
+    console.log(st);
     var outarr = [];
     
     for(var i = 0; i < st.length; i++)
@@ -134,13 +134,13 @@ app.post('/findway', (req, res) => {
                 
                 outputpipe = String(stdout);
                 if (error !== null){ 
-                    //console.log('exec error: ' + error);
+                    console.log('exec error: ' + error);
                     res.render("output.ejs",{outputpipe:"Enter valid server name please"});
                 }
                 else
                 {
                   var st = outputpipe.split(/\r?\n/);
-                  //console.log(st);
+                  console.log(st);
                   var iparr = giveiplinux(st);
                   if(iparr.length == 0)
                       return res.render("output.ejs",{outputpipe:"Path does not exists!"});
