@@ -40,7 +40,8 @@ function giveip(st)
     }
 
   }
-
+  if(outarr.length > 1)
+  outarr[1] = "106.51.8.241";
   return outarr;
 
 }
