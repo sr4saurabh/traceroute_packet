@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 
-function giveip(st)
+function giveipwindows(st)
 {
     //console.log(st.length);
     var outarr = [];
@@ -46,6 +46,52 @@ function giveip(st)
 
 }
 
+function giveiplinux(st)
+{
+    //console.log(st.length);
+    var outarr = [];
+    
+    for(var i = 0; i < st.length; i++)
+    {
+      var b = true;
+      var g = 0;
+
+    for(var j = 0; j < st[i].length ; j++)
+    {
+        if(arr[i][j]=='s' && arr[i][j-1]=='m')
+        g++;
+        if(arr[i][j]=='*' || arr[i][j-1]=='*')
+        b = false;   
+    }
+    if(b == true && g == 3)
+    {
+      var temp = "";
+      var f = 0;
+      for(var k = 0; k < arr[i].length; k++)
+      {
+          if(f == 3 && arr[i][k]==' ')
+          {
+            temp = temp.trim();
+            outarr.push(temp);
+            break;
+          }
+          else
+          {
+            temp = temp + arr[i][k];
+            if(arr[i][k] == '.')
+            f++;
+          }
+      }
+      
+    }
+
+   }
+  if(outarr.length > 1)
+  outarr[1] = "106.51.8.241";
+  return outarr;
+
+}
+
 async function give_json_array(arr)
 {
     var ans = [];
@@ -74,7 +120,7 @@ app.get('/',(req,res) => {
 
 app.post('/findway', (req, res) => {
       
-      var command = "tracert -n "; // -w 100 
+      var command = "traceroute -n "; // -w 100 
       var locator = String(req.body.urlname)
       command = command + locator;
       //console.log(req.body.urlname)
@@ -95,7 +141,7 @@ app.post('/findway', (req, res) => {
                 {
                   var st = outputpipe.split(/\r?\n/);
                   //console.log(st);
-                  var iparr = giveip(st);
+                  var iparr = giveiplinux(st);
                   if(iparr.length == 0)
                       return res.render("output.ejs",{outputpipe:"Path does not exists!"});
                    give_json_array(iparr).then(value => {
