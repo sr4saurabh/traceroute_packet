@@ -5,7 +5,7 @@
  <hr style = "color : black">
 <br>
 <ul>
-<li>It is based on sending the icmp packet to a server and finding the route it goes through using the tracroute command.</li>
+<li>It is based on sending the icmp packet to a server and finding the route it goes.</li>
 <br>
 <li>This Project combines the power of asynchronous JavaScript(Async:Await :) and Child Processes combining it with ICMP to give the path.</li>
 <br>
