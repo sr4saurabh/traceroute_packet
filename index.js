@@ -11,10 +11,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 
-
 function giveip(st)
 {
-    console.log(st.length);
+    //console.log(st.length);
     var outarr = [];
     var querystring = "";
     for(var i = 0; i < st.length; i++)
@@ -68,16 +67,16 @@ async function give_json_array(arr)
 
 app.get('/',(req,res) => {
   res.sendFile(
-		path.join(__dirname+"/start.html"));
+		path.join(__dirname+"/hello.html"));
 });
 
 
 app.post('/findway', (req, res) => {
       
-      var command = "tracert -d ";
+      var command = "tracert -d -w 100 ";
       var locator = String(req.body.urlname)
       command = command + locator;
-      console.log(req.body.urlname)
+      //console.log(req.body.urlname)
       var outputpipe;
       
       
@@ -88,20 +87,22 @@ app.post('/findway', (req, res) => {
                 
                 outputpipe = String(stdout);
                 if (error !== null){ 
-                    console.log('exec error: ' + error);
-                    res.render("output.ejs",{outputpipe:"cant reach to the server you asked."});
+                    //console.log('exec error: ' + error);
+                    res.render("output.ejs",{outputpipe:"Enter valid server name please"});
                 }
                 else
                 {
                   var st = outputpipe.split(/\r?\n/);
-                  console.log(st);
+                  //console.log(st);
                   var iparr = giveip(st);
-                  
-                  give_json_array(iparr).then(value => {
-                    console.log(value);
+                  if(iparr.length == 0)
+                      return res.render("output.ejs",{outputpipe:"Path does not exists!"});
+                   give_json_array(iparr).then(value => {
+                   // console.log(value);
                    return res.render("copy.ejs",{pipe:value});
-                
-                });
+                    }).catch(err => {
+                      res.render("output.ejs",{outputpipe:"Server Error!!"});
+                    });
                 }
          });   
   });
