@@ -120,7 +120,7 @@ app.get('/',(req,res) => {
 
 app.post('/findway', (req, res) => {
       
-      var command = "traceroute -n "; // -w 100 
+      var command = "heroku run traceroute.db -n "; // -w 100 
       var locator = String(req.body.urlname)
       command = command + locator;
       //console.log(req.body.urlname)
