@@ -2,12 +2,15 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+const fetch = require("node-fetch");
 const request = require('request');
 var path = require('path');
 var bodyParser = require('body-parser')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+
+
 
 function giveip(st)
 {
@@ -40,109 +43,77 @@ function giveip(st)
   }
 
   return outarr;
-      /**for(var i = 0; i < outarr.length; i++){
-      querystring = querystring + outarr[i] + ',';
-      }
-      querystring = querystring.slice(0,-1);
-      return querystring; **/
+
 }
 
-function givelatlong(F)
+async function give_json_array(arr)
 {
-  var ip = req.body.ip;
-  var mainurl = 'http://api.ipstack.com/'
-  var middleurl = ''
-  //middleurl has to made of ips seperated by commas
-  var apikey = '?access_key=fce13c65c996f0aa4a5c3193f0a5150b&fields = latitude,longitude'
-  var requrl = mainurl + middleurl + apikey
-
-  request(requrl, { json: true }, (err, res, body) => {
-  if (err)
-      console.log(err);
-  else
-      console.log(body);
-  
-});
+    var ans = [];
+      for(var i = 1; i < arr.length ; i++)
+      {
+        var mainurl = 'http://api.ipstack.com/';
+        var middleurl = arr[i];
+        var apikey = '?access_key=fce13c65c996f0aa4a5c3193f0a5150b&fields=latitude,longitude';
+        
+        var requrl = mainurl + middleurl + apikey;
+        const response = await fetch(requrl);
+        const restext = await response.json();
+        var lat = restext.latitude;
+        var long = restext.longitude;
+        if(lat != null && long != null)
+        ans.push([long,lat]);
+      }
+      return ans;
 }
 
 app.get('/',(req,res) => {
   res.sendFile(
 		path.join(__dirname+"/start.html"));
-})
-
-app.post('/findway', (req, res) => {
- var command = "tracert -d ";
- var locator = String(req.body.urlname)
- command = command + locator;
- console.log(req.body.urlname)
- var outputpipe;
- var exec = require('child_process').exec;
-  var child;
-  child = exec(command,
-    function (error, stdout, stderr) {
-       
-       outputpipe = String(stdout);
-       if (error !== null){ 
-           console.log('exec error: ' + error);
-           res.render("output.ejs",{outputpipe:"cant reach to the server you asked."});
-       }
-       else
-       {
-        var st = outputpipe.split(/\r?\n/);
-        console.log(st);
-        var iparr = giveip(st);
-
-                var geopoints = [];
-                for(var i = 1; i < 4 ; i++){
-                      var mainurl = 'http://api.ipstack.com/';
-                      var middleurl = iparr[i];
-                      //middleurl has to made of ips seperated by commas
-                      var apikey = '?access_key=fce13c65c996f0aa4a5c3193f0a5150b&fields=latitude,longitude';
-                      var requrl = mainurl + middleurl + apikey;
-      
-                      request(requrl, { json: true }, (err, res, body) => {
-                      if (err)
-                          console.log(err);
-                      else
-                      {
-                        console.log(body);
-                      }
-                         
-                      
-                      });
-                }
-                
-
-        res.render("output.ejs",{outputpipe:iparr});
-       }
-         
-       
-     
-    });   
-})
-app.get('/pip',(req,res) => {
-    
-    res.render('copy.ejs',{pipe:[[81.595354,25.578121],[-77.032, 38.913],[-36.954105,-5.402580]]});
-})
-app.post('/geo' , (req,res) => {
- 
-  var ip = req.body.ip;
-  var mainurl = 'http://api.ipstack.com/'
-  var middleurl = ''
-  //middleurl has to made of ips seperated by commas
-  var apikey = '?access_key=fce13c65c996f0aa4a5c3193f0a5150b'
-  var requrl = mainurl + middleurl + apikey
-
-  request(requrl, { json: true }, (err, res, body) => {
-  if (err)
-      console.log(err);
-  else
-      console.log(body);
-  
 });
 
-})
 
+app.post('/findway', (req, res) => {
+      
+      var command = "tracert -d ";
+      var locator = String(req.body.urlname)
+      command = command + locator;
+      console.log(req.body.urlname)
+      var outputpipe;
+      
+      
+      var exec = require('child_process').exec;
+        var child;
+        child = exec(command,
+              function (error, stdout, stderr) {
+                
+                outputpipe = String(stdout);
+                if (error !== null){ 
+                    console.log('exec error: ' + error);
+                    res.render("output.ejs",{outputpipe:"cant reach to the server you asked."});
+                }
+                else
+                {
+                  var st = outputpipe.split(/\r?\n/);
+                  console.log(st);
+                  var iparr = giveip(st);
+                  
+                  give_json_array(iparr).then(value => {
+                    console.log(value);
+                   return res.render("copy.ejs",{pipe:value});
+                
+                });
+                }
+         });   
+  });
+
+
+
+//------------------------------------------->>>Testing points functions start
+app.get('/pip',(req,res) => {
+    
+  res.render('copy.ejs',{pipe:[[81.595354456456456,25.578121546456546],[-77.032, 38.913],[-36.954105,-5.402580]]});
+})
+//------------------------------------------->>>>Testing points functions end
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
