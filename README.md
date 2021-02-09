@@ -8,5 +8,5 @@
 <br>
 <li>Traceroute combines the power of asynchronous JavaScript and Child Processes combining it with ICMP to give the path.</li>
 <br>
-<li> APIs used is -> IpStack.</li>
+<li> APIs used  -> IpStack.</li>
 <ul>
