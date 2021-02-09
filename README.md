@@ -11,4 +11,4 @@
 <br>
 <li> APIs used  -> IpStack.</li>
 <ul>
- <p><small> v1.2 coming soon! </small></p>
+ 
