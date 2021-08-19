@@ -2,7 +2,7 @@
  <a href="https://www.youtube.com/watch?v=j3y-1q0Dn3c&t=74s">Video Link</a> 
 <hr>
 <h3><spanstyle ="font-style : italic">TraceRoute_Packet is a mini-project fully made by me inspired from the Forouzan's Networking Book.<span></h3>
- <h4> It finds out the route from servers at RAMAIAH INSTITUTE OF TECHNOLOGY,BANGALORE to the server you want if their firewall allows passage of ICMP packets. </h4>
+ <h4> It finds out the route from hosting servers to the server[ eg. google.com :) ] you want if their firewall allows passage of ICMP packets. </h4>
  <hr style = "color : black">
 <br>
 <ul>
